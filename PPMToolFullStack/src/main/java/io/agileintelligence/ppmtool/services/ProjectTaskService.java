@@ -5,6 +5,7 @@ import io.agileintelligence.ppmtool.domain.ProjectTask;
 import io.agileintelligence.ppmtool.repositories.BacklogRepository;
 import io.agileintelligence.ppmtool.repositories.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,7 +34,7 @@ public class ProjectTaskService {
 
         //Add Sequence to Project Task
         projectTask.setProjectSequence(projectIdentifier + "-" + BacklogSequence);
-        projectTask.setProjectIdentifer(projectIdentifier);
+        projectTask.setProjectIdentifier(projectIdentifier);
 
         //Initial priority when priority is null
         if (projectTask.getPriority() == null) { //In the future we need projectTask.getPriority() == 0 to handle the form
@@ -46,5 +47,9 @@ public class ProjectTaskService {
 
         return projectTaskRepository.save(projectTask);
 
+    }
+
+    public Iterable<ProjectTask> findBacklogById(String id) {
+        return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
 }
